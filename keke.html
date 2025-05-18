@@ -1,0 +1,2450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Arcade | Premium Game Collection</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
+
+        :root {
+            --primary: #8b5cf6;
+            --secondary: #c4b5fd;
+            --dark: #1e1b4b;
+            --light: #f5f5f4;
+            --accent: #f472b6;
+            --gold: #fbbf24;
+            --silver: #e5e7eb;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+            letter-spacing: 0.5px;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #2e1065 0%, #7c3aed 100%);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(139, 92, 246, 0.3);
+        }
+
+        .game-card {
+            transition: all 0.4s ease;
+            border: 2px solid transparent;
+        }
+
+        .game-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            border-image: linear-gradient(45deg, var(--gold), var(--silver)) 1;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            color: var(--light);
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(139, 92, 246, 0.6);
+        }
+
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(139, 92, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0); }
+        }
+
+        .flip-in {
+            animation: flipIn 0.6s ease-out forwards;
+        }
+
+        @keyframes flipIn {
+            from { transform: rotateY(90deg); opacity: 0; }
+            to { transform: rotateY(0deg); opacity: 1; }
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+
+        .dice-roll {
+            animation: roll 0.8s ease-out;
+        }
+
+        @keyframes roll {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        .card-flip {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .card-flip.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            backface-visibility: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+        }
+
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+
+        .tile {
+            transition: all 0.3s ease;
+        }
+
+        .tile:hover {
+            transform: scale(1.05);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .slide-up {
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .zoom-in {
+            animation: zoomIn 0.3s ease-out;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        body.light-theme {
+            background-color: #f5f5f4;
+            color: #1e1b4b;
+        }
+
+        body.light-theme .gradient-bg {
+            background: linear-gradient(135deg, #7c3aed 0%, #db2777 100%);
+        }
+
+        body.light-theme .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .text-white {
+            color: #1e1b4b !important;
+        }
+
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .loader-spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid var(--primary);
+            border-top: 6px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .mobile-menu {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+
+        .game-tab-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .game-tab-btn {
+            transition: all 0.3s ease;
+        }
+
+        .game-tab-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .game-content {
+            display: none;
+        }
+
+        .game-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="loader">
+        <div class="loader-spinner"></div>
+    </div>
+
+    <nav class="gradient-bg py-4 px-6 fixed w-full z-50" aria-label="Main navigation">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-gamepad text-3xl text-white" aria-hidden="true"></i>
+                <span class="text-2xl font-bold text-white">Nexus Arcade</span>
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <a href="#home" class="text-white hover:text-purple-200 transition" aria-label="Home">Home</a>
+                <a href="#games" class="text-white hover:text-purple-200 transition" aria-label="Games">Games</a>
+                <a href="#about" class="text-white hover:text-purple-200 transition" aria-label="About">About</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="theme-toggle text-white text-xl" aria-label="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="md:hidden text-white text-2xl" id="mobile-menu-toggle" aria-label="Toggle mobile menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        <div class="mobile-menu fixed top-0 right-0 h-full w-64 bg-gray-900 transform translate-x-full md:hidden z-50">
+            <div class="flex justify-end p-4">
+                <button id="mobile-menu-close" class="text-white text-2xl" aria-label="Close mobile menu">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="flex flex-col space-y-4 p-4">
+                <a href="#home" class="text-white hover:text-purple-200 transition" aria-label="Home">Home</a>
+                <a href="#games" class="text-white hover:text-purple-200 transition" aria-label="Games">Games</a>
+                <a href="#about" class="text-white hover:text-purple-200 transition" aria-label="About">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden pt-16">
+        <div id="particles-js"></div>
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-black opacity-50"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-70"></div>
+        </div>
+        <div class="container mx-auto px-6 z-10 text-center">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 text-white slide-up">
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">Premium</span> Game Collection
+            </h1>
+            <p class="text-xl md:text-2xl text-purple-100 mb-10 max-w-3xl mx-auto slide-up" style="animation-delay: 0.2s;">
+               Play your favorite games in one place — all designed to look great and run smoothly for the best experience.
+            </p>
+            <div class="flex justify-center space-x-4 slide-up" style="animation-delay: 0.4s;">
+                <a href="#games" class="btn-primary px-8 py-3 rounded-full font-semibold text-lg flex items-center" aria-label="Play games now">
+                    <i class="fas fa-play mr-2"></i> Play Now
+                </a>
+                <a href="#about" class="px-8 py-3 rounded-full font-semibold text-lg border-2 border-white text-white hover:bg-white hover:bg-opacity-10 transition flex items-center" aria-label="Learn more about Nexus Arcade">
+                    <i class="fas fa-info-circle mr-2"></i> Learn More
+                </a>
+            </div>
+        </div>
+        <div class="absolute bottom-10 left-0 right-0 flex justify-center z-10">
+            <a href="#games" class="text-white text-4xl animate-bounce" aria-label="Scroll to games section">
+                <i class="fas fa-chevron-down"></i>
+            </a>
+        </div>
+    </section>
+
+    <section id="games" class="py-20 px-6">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-16 text-white relative">
+                <span class="relative inline-block">
+                    Our Game Collection
+                    <span class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"></span>
+                </span>
+            </h2>
+            <div class="max-w-5xl mx-auto mb-12">
+                <div class="flex flex-wrap justify-center gap-2">
+                    <button onclick="openGameTab('rps')" class="game-tab-btn active px-6 py-2 rounded-full font-medium bg-purple-600 text-white" aria-label="Rock Paper Scissors">
+                        <i class="fas fa-hand-rock mr-2"></i> Rock Paper Scissors
+                    </button>
+                    <button onclick="openGameTab('guessing')" class="game-tab-btn px-6 py-2 rounded-full font-medium bg-gray-700 hover:bg-gray-600 text-white" aria-label="Number Guessing">
+                        <i class="fas fa-question mr-2"></i> Number Guessing
+                    </button>
+                   
+                    <button onclick="openGameTab('memory')" class="game-tab-btn px-6 py-2 rounded-full font-medium bg-gray-700 hover:bg-gray-600 text-white" aria-label="Memory Game">
+                        <i class="fas fa-brain mr-2"></i> Memory Game
+                    </button>
+                    <button onclick="openGameTab('trivia')" class="game-tab-btn px-6 py-2 rounded-full font-medium bg-gray-700 hover:bg-gray-600 text-white" aria-label="Trivia Quiz">
+                        <i class="fas fa-question-circle mr-2"></i> Trivia Quiz
+                    </button>
+                    <button onclick="openGameTab('word')" class="game-tab-btn px-6 py-2 rounded-full font-medium bg-gray-700 hover:bg-gray-600 text-white" aria-label="Word Unscramble">
+                        <i class="fas fa-font mr-2"></i> Word Unscramble
+                    </button>
+                    <button onclick="openGameTab('puzzle')" class="game-tab-btn px-6 py-2 rounded-full font-medium bg-gray-700 hover:bg-gray-600 text-white" aria-label="Grid Puzzle">
+                        <i class="fas fa-puzzle-piece mr-2"></i> Grid Puzzle
+                    </button>
+                    <button onclick="openGameTab('clicker')" class="game-tab-btn px-6 py-2 rounded-full font-medium bg-gray-700 hover:bg-gray-600 text-white" aria-label="Idle Clicker">
+                        <i class="fas fa-mouse-pointer mr-2"></i> Idle Clicker
+                    </button>
+                    <button onclick="openGameTab('card')" class="game-tab-btn px-6 py-2 rounded-full font-medium bg-gray-700 hover:bg-gray-600 text-white" aria-label="Card Battle">
+                        <i class="fas fa-heart mr-2"></i> Card Battle
+                    </button>
+                    <button onclick="openGameTab('reaction')" class="game-tab-btn px-6 py-2 rounded-full font-medium bg-gray-700 hover:bg-gray-600 text-white" aria-label="Reaction Test">
+                        <i class="fas fa-bolt mr-2"></i> Reaction Test
+                    </button>
+                    <button onclick="openGameTab('tictactoe')" class="game-tab-btn px-6 py-2 rounded-full font-medium bg-gray-700 hover:bg-gray-600 text-white" aria-label="Tic-Tac-Toe">
+                        <i class="fas fa-th mr-2"></i> Tic-Tac-Toe
+                    </button>
+                    <button onclick="openGameTab('simon')" class="game-tab-btn px-6 py-2 rounded-full font-medium bg-gray-700 hover:bg-gray-600 text-white" aria-label="Simon Says">
+                        <i class="fas fa-music mr-2"></i> Simon Says
+                    </button>
+                </div>
+            </div>
+            <div class="glass-card p-8 rounded-2xl max-w-5xl mx-auto">
+                <div id="rps" class="game-content active">
+                    <div class="text-center mb-8">
+                        <h3 class="text-3xl font-bold text-white mb-2">Rock Paper Scissors</h3>
+                        <p class="text-purple-200">Challenge the computer in this classic game of strategy!</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="flex justify-between w-full max-w-md mb-8">
+                            <div class="text-center">
+                                <h4 class="text-xl font-semibold text-white mb-2">You</h4>
+                                <div id="player-choice" class="text-6xl mb-2 h-20 flex items-center justify-center" aria-live="polite">?</div>
+                                <div class="text-green-400 font-medium" id="player-score">Score: 0</div>
+                            </div>
+                            <div class="text-center">
+                                <h4 class="text-xl font-semibold text-white mb-2">Computer</h4>
+                                <div id="computer-choice" class="text-6xl mb-2 h-20 flex items-center justify-center" aria-live="polite">?</div>
+                                <div class="text-red-400 font-medium" id="computer-score">Score: 0</div>
+                            </div>
+                        </div>
+                        <div id="result" class="text-2xl font-bold mb-8 h-10 text-center text-white" aria-live="assertive"></div>
+                        <div class="flex space-x-4 mb-8">
+                            <button onclick="playGame('rock')" class="w-20 h-20 rounded-full bg-gray-800 hover:bg-gray-700 flex items-center justify-center text-4xl transition-all hover:scale-110" aria-label="Choose Rock">
+                                <i class="fas fa-hand-rock"></i>
+                            </button>
+                            <button onclick="playGame('paper')" class="w-20 h-20 rounded-full bg-gray-800 hover:bg-gray-700 flex items-center justify-center text-4xl transition-all hover:scale-110" aria-label="Choose Paper">
+                                <i class="fas fa-hand-paper"></i>
+                            </button>
+                            <button onclick="playGame('scissors')" class="w-20 h-20 rounded-full bg-gray-800 hover:bg-gray-700 flex items-center justify-center text-4xl transition-all hover:scale-110" aria-label="Choose Scissors">
+                                <i class="fas fa-hand-scissors"></i>
+                            </button>
+                        </div>
+                        <button onclick="resetRPS()" class="px-6 py-2 rounded-full bg-gray-700 hover:bg-gray-600 text-white font-medium" aria-label="Reset Rock Paper Scissors game">
+                            <i class="fas fa-redo mr-2"></i> Reset Game
+                        </button>
+                    </div>
+                </div>
+                <div id="guessing" class="game-content">
+                    <div class="text-center mb-8">
+                        <h3 class="text-3xl font-bold text-white mb-2">Number Guessing</h3>
+                        <p class="text-purple-200">Guess the secret number between 1 and 100!</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="mb-6 w-full max-w-md">
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm text-purple-200">1</span>
+                                <span class="text-sm text-purple-200">100</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2.5">
+                                <div id="range-indicator" class="bg-purple-600 h-2.5 rounded-full" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-6">
+                            <input type="number" id="guess-input" class="px-4 py-3 rounded-lg bg-gray-800 text-white text-center text-xl w-32" min="1" max="100" placeholder="Your guess" aria-label="Enter your guess">
+                        </div>
+                        <div class="flex space-x-4 mb-6">
+                            <button onclick="checkGuess()" class="px-6 py-3 rounded-full bg-purple-600 hover:bg-purple-700 text-white font-medium" aria-label="Submit guess">
+                                <i class="fas fa-check mr-2"></i> Submit Guess
+                            </button>
+                            <button onclick="getHint()" class="px-6 py-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-medium" aria-label="Get hint">
+                                <i class="fas fa-lightbulb mr-2"></i> Get Hint
+                            </button>
+                        </div>
+                        <div id="hint" class="text-lg text-yellow-300 mb-4 text-center" aria-live="polite"></div>
+                        <div id="guess-result" class="text-xl font-bold mb-4 text-center" aria-live="assertive"></div>
+                        <div id="guess-history" class="text-gray-400 mb-6 text-center"></div>
+                        <button onclick="startNewGame()" class="px-6 py-2 rounded-full bg-gray-700 hover:bg-gray-600 text-white font-medium" aria-label="Start new number guessing game">
+                            <i class="fas fa-redo mr-2"></i> New Game
+                        </button>
+                    </div>
+                </div>
+                <div id="dice" class="game-content">
+                    <div class="text-center mb-8">
+                        <h3 class="text-3xl font-bold text-white mb-2">Dice Roller</h3>
+                        <p class="text-purple-200">Roll the dice and see what fate has in store!</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="mb-8 flex justify-center">
+                            <div id="dice-result" class="text-8xl dice-roll" aria-live="polite">🎲</div>
+                        </div>
+                        <div class="mb-8">
+                            <div class="flex space-x-4">
+                                <button onclick="rollDice(6)" class="px-6 py-3 rounded-full bg-purple-600 hover:bg-purple-700 text-white font-medium" aria-label="Roll 6-sided dice">
+                                    <i class="fas fa-dice mr-2"></i> Roll 6-sided
+                                </button>
+                                <button onclick="rollDice(20)" class="px-6 py-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-medium" aria-label="Roll 20-sided dice">
+                                    <i class="fas fa-dice-d20 mr-2"></i> Roll 20-sided
+                                </button>
+                            </div>
+                        </div>
+                        <div class="w-full max-w-md">
+                            <h4 class="text-xl font-semibold text-white mb-4 text-center">Roll History</h4>
+                            <div id="roll-history" class="grid grid-cols-3 md:grid-cols-5 gap-3"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="memory" class="game-content">
+                    <div class="text-center mb-8">
+                        <h3 class="text-3xl font-bold text-white mb-2">Memory Match</h3>
+                        <p class="text-purple-200">Test your memory by matching pairs of cards!</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="flex justify-between w-full max-w-md mb-6">
+                            <div class="text-lg font-medium text-white">
+                                <i class="fas fa-clock mr-2"></i> Time: <span id="memory-time">0</span>s
+                            </div>
+                            <div class="text-lg font-medium text-white">
+                                <i class="fas fa-star mr-2"></i> Level: <span id="memory-level">1</span>
+                            </div>
+                            <div class="text-lg font-medium text-white">
+                                <i class="fas fa-check-circle mr-2"></i> Matches: <span id="memory-matches">0</span>/<span id="memory-total">6</span>
+                            </div>
+                        </div>
+                        <div id="memory-board" class="grid grid-cols-3 md:grid-cols-4 gap-3 mb-6"></div>
+                        <div class="flex space-x-4">
+                            <button onclick="startMemoryGame()" class="px-6 py-2 rounded-full bg-purple-600 hover:bg-purple-700 text-white font-medium" aria-label="Start memory game">
+                                <i class="fas fa-play mr-2"></i> Start Game
+                            </button>
+                            <button onclick="resetMemoryGame()" class="px-6 py-2 rounded-full bg-gray-700 hover:bg-gray-600 text-white font-medium" aria-label="Reset memory game">
+                                <i class="fas fa-redo mr-2"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="trivia" class="game-content">
+                    <div class="text-center mb-8">
+                        <h3 class="text-3xl font-bold text-white mb-2">Trivia Challenge</h3>
+                        <p class="text-purple-200">Test your knowledge with these timed questions!</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div id="trivia-setup" class="w-full max-w-md text-center">
+                            <div class="mb-6">
+                                <label for="trivia-category" class="block text-lg text-white mb-2">Select Category:</label>
+                                <select id="trivia-category" class="w-full px-4 py-2 rounded-lg bg-gray-800 text-white" aria-label="Select trivia category">
+                                    <option value="9">General Knowledge</option>
+                                    <option value="17">Science & Nature</option>
+                                    <option value="21">Sports</option>
+                                    <option value="23">History</option>
+                                    <option value="11">Movies</option>
+                                    <option value="12">Music</option>
+                                </select>
+                            </div>
+                            <div class="mb-6">
+                                <label for="trivia-difficulty" class="block text-lg text-white mb-2">Select Difficulty:</label>
+                                <select id="trivia-difficulty" class="w-full px-4 py-2 rounded-lg bg-gray-800 text-white" aria-label="Select trivia difficulty">
+                                    <option value="easy">Easy</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="hard">Hard</option>
+                                </select>
+                            </div>
+                            <button onclick="startTrivia()" class="px-6 py-3 rounded-full bg-purple-600 hover:bg-purple-700 text-white font-medium" aria-label="Start trivia quiz">
+                                <i class="fas fa-play mr-2"></i> Start Quiz
+                            </button>
+                        </div>
+                        <div id="trivia-game" class="hidden w-full max-w-md">
+                            <div class="flex justify-between mb-6">
+                                <div class="text-lg font-medium text-white">
+                                    <i class="fas fa-question-circle mr-2"></i> Question: <span id="trivia-current">1</span>/10
+                                </div>
+                                <div class="text-lg font-medium text-white">
+                                    <i class="fas fa-clock mr-2"></i> Time: <span id="trivia-timer">30</span>s
+                                </div>
+                            </div>
+                            <div class="glass-card p-6 mb-6">
+                                <h4 id="trivia-question" class="text-xl font-semibold text-white mb-4"></h4>
+                                <div id="trivia-options" class="space-y-3"></div>
+                            </div>
+                            <div id="trivia-feedback" class="text-xl font-bold mb-4 text-center" aria-live="assertive"></div>
+                            <button id="trivia-next" onclick="nextTriviaQuestion()" class="hidden px-6 py-2 rounded-full bg-purple-600 hover:bg-purple-700 text-white font-medium" aria-label="Next trivia question">
+                                <i class="fas fa-arrow-right mr-2"></i> Next Question
+                            </button>
+                        </div>
+                        <div id="trivia-results" class="hidden w-full max-w-md text-center">
+                            <h4 class="text-2xl font-bold text-white mb-4">Quiz Results</h4>
+                            <div class="glass-card p-6 mb-6">
+                                <div class="text-4xl font-bold mb-2" id="trivia-score">0/10</div>
+                                <div class="text-lg text-purple-200 mb-4" id="trivia-percentage">0%</div>
+                                <div class="h-4 bg-gray-700 rounded-full mb-2">
+                                    <div id="trivia-progress" class="h-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full" style="width: 0%"></div>
+                                </div>
+                                <div class="text-sm text-gray-400">Correct Answers</div>
+                            </div>
+                            <button onclick="resetTrivia()" class="px-6 py-2 rounded-full bg-purple-600 hover:bg-purple-700 text-white font-medium" aria-label="Play trivia again">
+                                <i class="fas fa-redo mr-2"></i> Play Again
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="word" class="game-content">
+                    <div class="text-center mb-8">
+                        <h3 class="text-3xl font-bold text-white mb-2">Word Unscramble</h3>
+                        <p class="text-purple-200">Unscramble the letters to form a valid word!</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="glass-card p-6 mb-6 w-full max-w-md">
+                            <div class="flex justify-between mb-4">
+                                <div class="text-lg font-medium text-white">
+                                    <i class="fas fa-star mr-2"></i> Points: <span id="word-points">0</span>
+                                </div>
+                                <div class="text-lg font-medium text-white">
+                                    <i class="fas fa-check-circle mr-2"></i> Solved: <span id="word-solved">0</span>
+                                </div>
+                            </div>
+                            <div class="mb-6">
+                                <div class="text-xl text-purple-200 mb-2">Scrambled Word:</div>
+                                <div id="scrambled-word" class="text-3xl font-bold text-white tracking-widest mb-4"></div>
+                                <div class="text-sm text-gray-400">Hint: <span id="word-hint"></span></div>
+                            </div>
+                            <div class="mb-4">
+                                <input type="text" id="word-input" class="w-full px-4 py-3 rounded-lg bg-gray-800 text-white text-center text-xl" placeholder="Your answer" aria-label="Enter your word">
+                            </div>
+                            <div class="flex space-x-3">
+                                <button onclick="checkWord()" class="flex-1 px-4 py-2 rounded-full bg-purple-600 hover:bg-purple-700 text-white font-medium" aria-label="Submit word">
+                                    <i class="fas fa-check mr-2"></i> Submit
+                                </button>
+                                <button onclick="getWordHint()" class="px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-medium" aria-label="Get word hint">
+                                    <i class="fas fa-lightbulb mr-2"></i> Hint
+                                </button>
+                                <button onclick="skipWord()" class="px-4 py-2 rounded-full bg-gray-700 hover:bg-gray-600 text-white font-medium" aria-label="Skip word">
+                                    <i class="fas fa-forward mr-2"></i> Skip
+                                </button>
+                            </div>
+                        </div>
+                        <div id="word-result" class="text-xl font-bold mb-4 text-center" aria-live="assertive"></div>
+                        <button onclick="newWordGame()" class="px-6 py-2 rounded-full bg-gray-700 hover:bg-gray-600 text-white font-medium" aria-label="Start new word unscramble game">
+                            <i class="fas fa-redo mr-2"></i> New Game
+                        </button>
+                    </div>
+                </div>
+                <div id="puzzle" class="game-content">
+                    <div class="text-center mb-8">
+                        <h3 class="text-3xl font-bold text-white mb-2">Grid Puzzle</h3>
+                        <p class="text-purple-200">Solve the puzzle by matching all tile colors!</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="flex justify-between w-full max-w-md mb-6">
+                            <div class="text-lg font-medium text-white">
+                                <i class="fas fa-clock mr-2"></i> Time: <span id="puzzle-time">0</span>s
+                            </div>
+                            <div class="text-lg font-medium text-white">
+                                <i class="fas fa-mouse-pointer mr-2"></i> Moves: <span id="puzzle-moves">0</span>
+                            </div>
+                        </div>
+                        <div id="puzzle-board" class="grid grid-cols-4 gap-2 mb-6"></div>
+                        <div class="flex space-x-4">
+                            <button onclick="startPuzzleGame()" class="px-6 py-2 rounded-full bg-purple-600 hover:bg-purple-700 text-white font-medium" aria-label="Start grid puzzle game">
+                                <i class="fas fa-play mr-2"></i> Start Game
+                            </button>
+                            <button onclick="resetPuzzleGame()" class="px-6 py-2 rounded-full bg-gray-700 hover:bg-gray-600 text-white font-medium" aria-label="Reset grid puzzle game">
+                                <i class="fas fa-redo mr-2"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="clicker" class="game-content">
+                    <div class="text-center mb-8">
+                        <h3 class="text-3xl font-bold text-white mb-2">Idle Clicker</h3>
+                        <p class="text-purple-200">Click to earn points and buy upgrades!</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="glass-card p-6 mb-6 w-full max-w-md">
+                            <div class="text-5xl font-bold text-center mb-4" id="clicker-points">0</div>
+                            <div class="text-lg text-purple-200 text-center mb-4">
+                                <span id="clicker-per-second">0</span> points per second
+                            </div>
+                            <button onclick="clickPoint()" id="clicker-button" class="w-full py-4 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold text-xl mb-6 transition-all active:scale-95" aria-label="Click to earn points">
+                                CLICK ME!
+                            </button>
+                            <div class="text-lg font-medium text-white mb-4">Upgrades</div>
+                            <div id="clicker-upgrades" class="space-y-3"></div>
+                        </div>
+                        <button onclick="resetClicker()" class="px-6 py-2 rounded-full bg-gray-700 hover:bg-gray-600 text-white font-medium" aria-label="Reset idle clicker game">
+                            <i class="fas fa-redo mr-2"></i> Reset Game
+                        </button>
+                    </div>
+                </div>
+                <div id="card" class="game-content">
+                    <div class="text-center mb-8">
+                        <h3 class="text-3xl font-bold text-white mb-2">Card Battle</h3>
+                        <p class="text-purple-200">Defeat your opponent with strategic card plays!</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="flex justify-between w-full max-w-2xl mb-6">
+                            <div class="text-center">
+                                <h4 class="text-xl font-semibold text-white mb-2">You</h4>
+                                <div class="h-4 bg-gray-700 rounded-full w-40 mb-1">
+                                    <div id="player-health" class="h-4 bg-green-500 rounded-full" style="width: 100%"></div>
+                                </div>
+                                <div class="text-sm text-gray-400">HP: <span id="player-hp">100</span>/100</div>
+                            </div>
+                            <div class="text-center">
+                                <h4 class="text-xl font-semibold text-white mb-2">Enemy</h4>
+                                <div class="h-4 bg-gray-700 rounded-full w-40 mb-1">
+                                    <div id="enemy-health" class="h-4 bg-red-500 rounded-full" style="width: 100%"></div>
+                                </div>
+                                <div class="text-sm text-gray-400">HP: <span id="enemy-hp">100</span>/100</div>
+                            </div>
+                        </div>
+                        <div id="battle-log" class="glass-card p-4 mb-6 w-full max-w-2xl h-32 overflow-y-auto" aria-live="polite">
+                            <div class="text-center text-gray-400">Battle log will appear here...</div>
+                        </div>
+                        <div id="battle-status" class="text-xl font-bold mb-6 text-center" aria-live="assertive"></div>
+                        <div id="player-cards" class="flex justify-center space-x-4 mb-6"></div>
+                        <div class="flex space-x-4">
+                            <button onclick="startBattle()" id="battle-start" class="px-6 py-2 rounded-full bg-purple-600 hover:bg-purple-700 text-white font-medium" aria-label="Start card battle">
+                                <i class="fas fa-play mr-2"></i> Start Battle
+                            </button>
+                            <button onclick="resetBattle()" class="px-6 py-2 rounded-full bg-gray-700 hover:bg-gray-600 text-white font-medium" aria-label="Reset card battle">
+                                <i class="fas fa-redo mr-2"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="reaction" class="game-content">
+                    <div class="text-center mb-8">
+                        <h3 class="text-3xl font-bold text-white mb-2">Reaction Test</h3>
+                        <p class="text-purple-200">Click as fast as you can when the color changes!</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="glass-card p-8 mb-6 w-full max-w-md text-center">
+                            <div id="reaction-box" class="w-full h-64 rounded-xl bg-gray-800 flex items-center justify-center cursor-pointer mb-6" role="button" aria-label="Click when color changes">
+                                <div class="text-xl text-gray-500">Wait for the color to change...</div>
+                            </div>
+                            <div class="text-2xl font-bold mb-4" id="reaction-time">0.00 ms</div>
+                            <div class="text-lg text-purple-200 mb-4">Best: <span id="best-time">0.00</span> ms</div>
+                            <button onclick="startReactionTest()" class="px-6 py-2 rounded-full bg-purple-600 hover:bg-purple-700 text-white font-medium" aria-label="Start reaction test">
+                                <i class="fas fa-play mr-2"></i> Start Test
+                            </button>
+                        </div>
+                        <div class="w-full max-w-md">
+                            <h4 class="text-xl font-semibold text-white mb-4 text-center">Your Recent Times</h4>
+                            <div id="reaction-history" class="grid grid-cols-3 gap-3"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="tictactoe" class="game-content">
+                    <div class="text-center mb-8">
+                        <h3 class="text-3xl font-bold text-white mb-2">Tic-Tac-Toe</h3>
+                        <p class="text-purple-200">Challenge the computer in this classic strategy game!</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="text-lg font-medium text-white mb-4">
+                            <i class="fas fa-trophy mr-2"></i> Wins: <span id="tictactoe-wins">0</span>
+                        </div>
+                        <div id="tictactoe-board" class="grid grid-cols-3 gap-2 w-64 mb-6"></div>
+                        <div id="tictactoe-result" class="text-xl font-bold mb-4 text-center" aria-live="assertive"></div>
+                        <div class="flex space-x-4">
+                            <button onclick="startTicTacToe()" class="px-6 py-2 rounded-full bg-purple-600 hover:bg-purple-700 text-white font-medium" aria-label="Start Tic-Tac-Toe game">
+                                <i class="fas fa-play mr-2"></i> Start Game
+                            </button>
+                            <button onclick="resetTicTacToe()" class="px-6 py-2 rounded-full bg-gray-700 hover:bg-gray-600 text-white font-medium" aria-label="Reset Tic-Tac-Toe game">
+                                <i class="fas fa-redo mr-2"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="simon" class="game-content">
+                    <div class="text-center mb-8">
+                        <h3 class="text-3xl font-bold text-white mb-2">Simon Says</h3>
+                        <p class="text-purple-200">Repeat the sequence to test your memory!</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="flex justify-between w-full max-w-md mb-6">
+                            <div class="text-lg font-medium text-white">
+                                <i class="fas fa-star mr-2"></i> Level: <span id="simon-level">1</span>
+                            </div>
+                            <div class="text-lg font-medium text-white">
+                                <i class="fas fa-trophy mr-2"></i> Score: <span id="simon-score">0</span>
+                            </div>
+                        </div>
+                        <div id="simon-board" class="grid grid-cols-2 gap-4 mb-6"></div>
+                        <div id="simon-result" class="text-xl font-bold mb-4 text-center" aria-live="assertive"></div>
+                        <button onclick="startSimonGame()" class="px-6 py-2 rounded-full bg-purple-600 hover:bg-purple-700 text-white font-medium" aria-label="Start Simon Says game">
+                            <i class="fas fa-play mr-2"></i> Start Game
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="py-20 px-6 gradient-bg">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-16 text-white relative">
+                <span class="relative inline-block">
+                    About Nexus Arcade
+                    <span class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full"></span>
+                </span>
+            </h2>
+            <div class="max-w-4xl mx-auto">
+                <div class="glass-card p-8 rounded-2xl mb-12">
+                    <h3 class="text-2xl font-bold text-white mb-4">About Nexus arcade</h3>
+                    <p class="text-purple-100 mb-6">
+                        Nexus Arcade is created to bring together a collection of beautifully designed games that showcase the power of  web tech. Each game has been created  with attention to detail, smooth animations, and engaging gameplay.
+                    </p>
+                    <p class="text-purple-100">
+                        Whether you're looking to kill a few minutes or dive deep into strategic gameplay, our collection has something for everyone. All games work directly in your browser with no downloads required!
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="glass-card p-6 rounded-2xl">
+                        <h3 class="text-xl font-bold text-white mb-4 flex items-center">
+                            <i class="fas fa-code mr-3 text-purple-400"></i> Built With
+                        </h3>
+                        <ul class="space-y-2">
+                            <li class="flex items-center text-purple-100">
+                                <i class="fas fa-check-circle mr-2 text-green-400"></i> HTML5 & CSS3
+                            </li>
+                            <li class="flex items-center text-purple-100">
+                                <i class="fas fa-check-circle mr-2 text-green-400"></i> JavaScript (ES6+)
+                            </li>
+                            <li class="flex items-center text-purple-100">
+                                <i class="fas fa-check-circle mr-2 text-green-400"></i> Tailwind CSS
+                            </li>
+                            <li class="flex items-center text-purple-100">
+                                <i class="fas fa-check-circle mr-2 text-green-400"></i> Font Awesome Icons
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl">
+                        <h3 class="text-xl font-bold text-white mb-4 flex items-center">
+                            <i class="fas fa-star mr-3 text-yellow-400"></i> Features
+                        </h3>
+                        <ul class="space-y-2">
+                            <li class="flex items-center text-purple-100">
+                                <i class="fas fa-check-circle mr-2 text-green-400"></i> 11 Unique Games
+                            </li>
+                           
+                            <li class="flex items-center text-purple-100">
+                                <i class="fas fa-check-circle mr-2 text-green-400"></i> Smooth Animations
+                            </li>
+                            <li class="flex items-center text-purple-100">
+                                <i class="fas fa-check-circle mr-2 text-green-400"></i> Fully Responsive
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-8 px-6 bg-gray-900">
+        <div class="container mx-auto text-center">
+            <div class="flex justify-center space-x-6 mb-6">
+                
+            </div>
+            <p class="text-gray-400">
+                © 2025 Nexus Arcade. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Fallback to hide loader
+        try {
+            setTimeout(() => {
+                const loader = document.querySelector('.loader');
+                if (loader) loader.style.display = 'none';
+            }, 1000);
+        } catch (e) {
+            console.error('Loader fallback error:', e);
+        }
+
+        // DOM Initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                // Mobile Menu
+                const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+                const mobileMenuClose = document.getElementById('mobile-menu-close');
+                const mobileMenu = document.querySelector('.mobile-menu');
+
+                mobileMenuToggle.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('open');
+                    mobileMenu.classList.toggle('translate-x-full');
+                });
+
+                mobileMenuClose.addEventListener('click', () => {
+                    mobileMenu.classList.remove('open');
+                    mobileMenu.classList.add('translate-x-full');
+                });
+
+                mobileMenu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.remove('open');
+                        mobileMenu.classList.add('translate-x-full');
+                    });
+                });
+
+                // Theme Toggle
+                const themeToggle = document.querySelector('.theme-toggle');
+                themeToggle.addEventListener('click', () => {
+                    document.body.classList.toggle('light-theme');
+                    themeToggle.innerHTML = document.body.classList.contains('light-theme') 
+                        ? '<i class="fas fa-sun"></i>' 
+                        : '<i class="fas fa-moon"></i>';
+                });
+
+                // Particle.js
+                if (typeof particlesJS !== 'undefined') {
+                    particlesJS('particles-js', {
+                        particles: {
+                            number: { value: 60, density: { enable: true, value_area: 800 } },
+                            color: { value: ['#8b5cf6', '#f472b6', '#fbbf24'] },
+                            shape: { type: 'circle' },
+                            opacity: { value: 0.5, random: true },
+                            size: { value: 3, random: true },
+                            line_linked: { enable: false },
+                            move: { enable: true, speed: 2, direction: 'none', random: true }
+                        },
+                        interactivity: {
+                            detect_on: 'canvas',
+                            events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' } },
+                            modes: { repulse: { distance: 100, duration: 0.4 }, push: { particles_nb: 4 } }
+                        }
+                    });
+                }
+
+                // Smooth scrolling
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                    anchor.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        document.querySelector(this.getAttribute('href')).scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    });
+                });
+
+                // Initialize first game
+                initRPS();
+            } catch (e) {
+                console.error('DOM initialization error:', e);
+            }
+        });
+
+        // Game Tab Navigation
+        function openGameTab(gameId) {
+            try {
+                document.querySelectorAll('.game-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.querySelectorAll('.game-tab-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    btn.classList.add('bg-gray-700', 'hover:bg-gray-600');
+                });
+                const targetContent = document.getElementById(gameId);
+                targetContent.classList.add('active');
+                const activeBtn = Array.from(document.querySelectorAll('.game-tab-btn')).find(btn => btn.getAttribute('aria-label').toLowerCase().includes(gameId));
+                if (activeBtn) {
+                    activeBtn.classList.add('active');
+                    activeBtn.classList.remove('bg-gray-700', 'hover:bg-gray-600');
+                }
+                if (gameId === 'rps') initRPS();
+                else if (gameId === 'guessing') startNewGame();
+                else if (gameId === 'memory') initMemoryGame();
+                else if (gameId === 'trivia') resetTrivia();
+                else if (gameId === 'word') newWordGame();
+                else if (gameId === 'puzzle') initPuzzleGame();
+                else if (gameId === 'clicker') initClicker();
+                else if (gameId === 'card') initBattle();
+                else if (gameId === 'reaction') initReactionTest();
+                else if (gameId === 'tictactoe') initTicTacToe();
+                else if (gameId === 'simon') initSimonGame();
+            } catch (e) {
+                console.error(`Error opening game tab ${gameId}:`, e);
+            }
+        }
+
+        // Local Storage
+        function saveGameProgress(gameId, data) {
+            try {
+                localStorage.setItem(`nexus_arcade_${gameId}`, JSON.stringify(data));
+            } catch (e) {
+                console.error(`Error saving progress for ${gameId}:`, e);
+            }
+        }
+
+        function loadGameProgress(gameId) {
+            try {
+                const data = localStorage.getItem(`nexus_arcade_${gameId}`);
+                return data ? JSON.parse(data) : null;
+            } catch (e) {
+                console.error(`Error loading progress for ${gameId}:`, e);
+                return null;
+            }
+        }
+
+        // Utility Functions
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function decodeHtmlEntities(text) {
+            const textarea = document.createElement('textarea');
+            textarea.innerHTML = text;
+            return textarea.value;
+        }
+
+        // Rock Paper Scissors
+        let playerScore = 0;
+        let computerScore = 0;
+
+        function initRPS() {
+            try {
+                const saved = loadGameProgress('rps');
+                playerScore = saved ? saved.playerScore : 0;
+                computerScore = saved ? saved.computerScore : 0;
+                updateRPSScores();
+                document.getElementById('result').textContent = '';
+                document.getElementById('player-choice').textContent = '?';
+                document.getElementById('computer-choice').textContent = '?';
+            } catch (e) {
+                console.error('RPS initialization error:', e);
+            }
+        }
+
+        function playGame(playerChoice) {
+            try {
+                const choices = ['rock', 'paper', 'scissors'];
+                const computerChoice = choices[Math.floor(Math.random() * 3)];
+                const playerChoiceElement = document.getElementById('player-choice');
+                const computerChoiceElement = document.getElementById('computer-choice');
+                playerChoiceElement.innerHTML = getRPSIcon(playerChoice);
+                computerChoiceElement.innerHTML = getRPSIcon(computerChoice);
+                playerChoiceElement.classList.add('flip-in');
+                computerChoiceElement.classList.add('flip-in');
+                setTimeout(() => {
+                    playerChoiceElement.classList.remove('flip-in');
+                    computerChoiceElement.classList.remove('flip-in');
+                }, 600);
+                let result;
+                if (playerChoice === computerChoice) {
+                    result = "It's a tie!";
+                } else if (
+                    (playerChoice === 'rock' && computerChoice === 'scissors') ||
+                    (playerChoice === 'paper' && computerChoice === 'rock') ||
+                    (playerChoice === 'scissors' && computerChoice === 'paper')
+                ) {
+                    result = "You win!";
+                    playerScore++;
+                } else {
+                    result = "Computer wins!";
+                    computerScore++;
+                }
+                updateRPSScores();
+                saveGameProgress('rps', { playerScore, computerScore });
+                const resultElement = document.getElementById('result');
+                resultElement.textContent = result;
+                resultElement.classList.add('zoom-in');
+                setTimeout(() => {
+                    resultElement.classList.remove('zoom-in');
+                }, 300);
+            } catch (e) {
+                console.error('RPS play error:', e);
+            }
+        }
+
+        function getRPSIcon(choice) {
+            switch(choice) {
+                case 'rock': return '<i class="fas fa-hand-rock"></i>';
+                case 'paper': return '<i class="fas fa-hand-paper"></i>';
+                case 'scissors': return '<i class="fas fa-hand-scissors"></i>';
+                default: return '?';
+            }
+        }
+
+        function updateRPSScores() {
+            document.getElementById('player-score').textContent = `Score: ${playerScore}`;
+            document.getElementById('computer-score').textContent = `Score: ${computerScore}`;
+        }
+
+        function resetRPS() {
+            try {
+                playerScore = 0;
+                computerScore = 0;
+                updateRPSScores();
+                localStorage.removeItem('nexus_arcade_rps');
+                document.getElementById('result').textContent = 'Game reset!';
+                document.getElementById('result').classList.add('fade-in');
+                setTimeout(() => {
+                    document.getElementById('result').classList.remove('fade-in');
+                    document.getElementById('result').textContent = '';
+                }, 1000);
+            } catch (e) {
+                console.error('RPS reset error:', e);
+            }
+        }
+
+        // Number Guessing
+        let secretNumber;
+        let attempts;
+        let gameActive;
+
+        function startNewGame() {
+            try {
+                secretNumber = Math.floor(Math.random() * 100) + 1;
+                attempts = 0;
+                gameActive = true;
+                document.getElementById('guess-input').value = '';
+                document.getElementById('guess-result').textContent = '';
+                document.getElementById('hint').textContent = '';
+                document.getElementById('guess-history').textContent = '';
+                document.getElementById('range-indicator').style.width = '100%';
+                document.getElementById('guess-result').textContent = 'Guess a number between 1 and 100!';
+                document.getElementById('guess-result').classList.add('fade-in');
+                setTimeout(() => {
+                    document.getElementById('guess-result').classList.remove('fade-in');
+                }, 300);
+                document.getElementById('guess-input').focus();
+            } catch (e) {
+                console.error('Number guessing start error:', e);
+            }
+        }
+
+        function checkGuess() {
+            try {
+                if (!gameActive) return;
+                const guessInput = document.getElementById('guess-input');
+                const guess = parseInt(guessInput.value);
+                if (isNaN(guess) || guess < 1 || guess > 100) {
+                    document.getElementById('guess-result').textContent = 'Please enter a valid number between 1 and 100!';
+                    document.getElementById('guess-result').classList.add('shake');
+                    setTimeout(() => {
+                        document.getElementById('guess-result').classList.remove('shake');
+                    }, 500);
+                    return;
+                }
+                attempts++;
+                const historyElement = document.getElementById('guess-history');
+                historyElement.textContent = `Previous guesses: ${historyElement.textContent.replace('Previous guesses: ', '')}${guess} `;
+                updateRangeIndicator(guess);
+                if (guess === secretNumber) {
+                    document.getElementById('guess-result').innerHTML = `Congratulations! You guessed the number <span class="text-yellow-300">${secretNumber}</span> in <span class="text-green-400">${attempts}</span> attempts!`;
+                    document.getElementById('guess-result').classList.add('zoom-in');
+                    setTimeout(() => {
+                        document.getElementById('guess-result').classList.remove('zoom-in');
+                    }, 300);
+                    gameActive = false;
+                    saveGameProgress('guessing', { bestAttempts: attempts });
+                } else if (guess < secretNumber) {
+                    document.getElementById('guess-result').textContent = 'Too low! Try a higher number.';
+                    document.getElementById('guess-result').classList.add('fade-in');
+                    setTimeout(() => {
+                        document.getElementById('guess-result').classList.remove('fade-in');
+                    }, 300);
+                } else {
+                    document.getElementById('guess-result').textContent = 'Too high! Try a lower number.';
+                    document.getElementById('guess-result').classList.add('fade-in');
+                    setTimeout(() => {
+                        document.getElementById('guess-result').classList.remove('fade-in');
+                    }, 300);
+                }
+                guessInput.value = '';
+                guessInput.focus();
+            } catch (e) {
+                console.error('Number guessing check error:', e);
+            }
+        }
+
+        function updateRangeIndicator(guess) {
+            try {
+                const rangeElement = document.getElementById('range-indicator');
+                const min = guess < secretNumber ? guess : 1;
+                const max = guess > secretNumber ? guess : 100;
+                const newWidth = ((max - min) / 100) * 100;
+                rangeElement.style.width = `${newWidth}%`;
+                rangeElement.style.marginLeft = `${min - 1}%`;
+            } catch (e) {
+                console.error('Range indicator update error:', e);
+            }
+        }
+
+        function getHint() {
+            try {
+                if (!gameActive) return;
+                const hintElement = document.getElementById('hint');
+                if (secretNumber % 2 === 0) {
+                    hintElement.textContent = 'Hint: The number is even.';
+                } else {
+                    hintElement.textContent = 'Hint: The number is odd.';
+                }
+                hintElement.classList.add('fade-in');
+                setTimeout(() => {
+                    hintElement.classList.remove('fade-in');
+                }, 300);
+            } catch (e) {
+                console.error('Hint error:', e);
+            }
+        }
+
+        // Dice Roller
+        let rollHistory = [];
+
+        function initDice() {
+            try {
+                rollHistory = loadGameProgress('dice')?.rollHistory || [];
+                updateRollHistory();
+                document.getElementById('dice-result').textContent = '🎲';
+                document.getElementById('dice-result').classList.remove('dice-roll');
+            } catch (e) {
+                console.error('Dice initialization error:', e);
+            }
+        }
+
+        function rollDice(sides) {
+            try {
+                const result = Math.floor(Math.random() * sides) + 1;
+                const diceElement = document.getElementById('dice-result');
+                diceElement.textContent = '🎲';
+                diceElement.classList.add('dice-roll');
+                setTimeout(() => {
+                    diceElement.textContent = getDiceFace(result, sides);
+                    diceElement.classList.remove('dice-roll');
+                    rollHistory.unshift({
+                        value: result,
+                        sides: sides,
+                        timestamp: new Date()
+                    });
+                    if (rollHistory.length > 15) {
+                        rollHistory.pop();
+                    }
+                    updateRollHistory();
+                    saveGameProgress('dice', { rollHistory });
+                }, 800);
+            } catch (e) {
+                console.error('Dice roll error:', e);
+            }
+        }
+
+        function getDiceFace(value, sides) {
+            if (sides === 6) {
+                const faces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+                return faces[value - 1];
+            } else if (sides === 20) {
+                return `${value} <i class="fas fa-dice-d20"></i>`;
+            } else {
+                return value;
+            }
+        }
+
+        function updateRollHistory() {
+            try {
+                const historyElement = document.getElementById('roll-history');
+                historyElement.innerHTML = '';
+                rollHistory.forEach(roll => {
+                    const rollElement = document.createElement('div');
+                    rollElement.className = 'bg-gray-800 rounded-lg p-2 text-center';
+                    rollElement.innerHTML = `
+                        <div class="text-2xl">${getDiceFace(roll.value, roll.sides)}</div>
+                        <div class="text-xs text-gray-400">${roll.sides}-sided</div>
+                    `;
+                    historyElement.appendChild(rollElement);
+                });
+            } catch (e) {
+                console.error('Roll history update error:', e);
+            }
+        }
+
+        // Memory Game
+        let memoryCards = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        let memoryLevel = 1;
+        let memoryTimer;
+        let seconds = 0;
+        let gameStarted = false;
+
+        function initMemoryGame() {
+            try {
+                const saved = loadGameProgress('memory');
+                memoryCards = [];
+                flippedCards = [];
+                matchedPairs = 0;
+                memoryLevel = saved ? saved.memoryLevel : 1;
+                seconds = 0;
+                gameStarted = false;
+                createMemoryBoard();
+                updateMemoryStats();
+            } catch (e) {
+                console.error('Memory game initialization error:', e);
+            }
+        }
+
+        function createMemoryBoard() {
+            try {
+                const board = document.getElementById('memory-board');
+                board.innerHTML = '';
+                const totalPairs = memoryLevel + 3;
+                const icons = [
+                    'fa-heart', 'fa-star', 'fa-moon', 'fa-sun', 'fa-cloud', 
+                    'fa-bolt', 'fa-flag', 'fa-bell', 'fa-gem', 'fa-key',
+                    'fa-leaf', 'fa-umbrella', 'fa-car', 'fa-plane', 'fa-ship'
+                ].slice(0, totalPairs);
+                let cards = [];
+                icons.forEach(icon => {
+                    cards.push({ icon: icon, id: Math.random().toString(36).substr(2, 9) });
+                    cards.push({ icon: icon, id: Math.random().toString(36).substr(2, 9) });
+                });
+                memoryCards = shuffleArray(cards);
+                memoryCards.forEach(card => {
+                    const cardElement = document.createElement('div');
+                    cardElement.className = 'card-flip aspect-square bg-gray-800 rounded-lg cursor-pointer relative w-16 h-16 md:w-20 md:h-20';
+                    cardElement.dataset.id = card.id;
+                    cardElement.setAttribute('role', 'button');
+                    cardElement.setAttribute('aria-label', 'Memory card');
+                    cardElement.innerHTML = `
+                        <div class="card-front w-full h-full flex items-center justify-center bg-gray-700 rounded-lg">
+                            <i class="fas fa-question text-3xl text-purple-400"></i>
+                        </div>
+                        <div class="card-back w-full h-full flex items-center justify-center bg-purple-600 rounded-lg">
+                            <i class="fas ${card.icon} text-3xl text-white"></i>
+                        </div>
+                    `;
+                    cardElement.addEventListener('click', () => flipCard(cardElement));
+                    board.appendChild(cardElement);
+                });
+                document.getElementById('memory-total').textContent = totalPairs;
+            } catch (e) {
+                console.error('Memory board creation error:', e);
+            }
+        }
+
+        function flipCard(cardElement) {
+            try {
+                if (flippedCards.length >= 2 || cardElement.classList.contains('flipped') || !gameStarted) {
+                    return;
+                }
+                cardElement.classList.add('flipped');
+                flippedCards.push(cardElement);
+                if (flippedCards.length === 2) {
+                    const card1 = memoryCards.find(card => card.id === flippedCards[0].dataset.id);
+                    const card2 = memoryCards.find(card => card.id === flippedCards[1].dataset.id);
+                    if (card1.icon === card2.icon) {
+                        matchedPairs++;
+                        updateMemoryStats();
+                        flippedCards.forEach(card => {
+                            card.style.pointerEvents = 'none';
+                        });
+                        flippedCards = [];
+                        if (matchedPairs === parseInt(document.getElementById('memory-total').textContent)) {
+                            clearInterval(memoryTimer);
+                            setTimeout(() => {
+                                levelUpMemoryGame();
+                            }, 1000);
+                        }
+                    } else {
+                        setTimeout(() => {
+                            flippedCards.forEach(card => {
+                                card.classList.remove('flipped');
+                            });
+                            flippedCards = [];
+                        }, 1000);
+                    }
+                }
+            } catch (e) {
+                console.error('Memory card flip error:', e);
+            }
+        }
+
+        function startMemoryGame() {
+            try {
+                if (gameStarted) return;
+                gameStarted = true;
+                seconds = 0;
+                updateMemoryStats();
+                memoryTimer = setInterval(() => {
+                    seconds++;
+                    document.getElementById('memory-time').textContent = seconds;
+                }, 1000);
+            } catch (e) {
+                console.error('Memory game start error:', e);
+            }
+        }
+
+        function levelUpMemoryGame() {
+            try {
+                memoryLevel++;
+                matchedPairs = 0;
+                gameStarted = false;
+                updateMemoryStats();
+                saveGameProgress('memory', { memoryLevel });
+                createMemoryBoard();
+                const board = document.getElementById('memory-board');
+                const message = document.createElement('div');
+                message.className = 'col-span-3 md:col-span-4 text-center py-4 text-xl font-bold text-purple-300';
+                message.textContent = `Level ${memoryLevel}! Find ${memoryLevel + 3} pairs.`;
+                board.appendChild(message);
+                setTimeout(() => {
+                    message.remove();
+                }, 2000);
+            } catch (e) {
+                console.error('Memory level up error:', e);
+            }
+        }
+
+        function updateMemoryStats() {
+            try {
+                document.getElementById('memory-matches').textContent = matchedPairs;
+                document.getElementById('memory-time').textContent = seconds;
+                document.getElementById('memory-level').textContent = memoryLevel;
+            } catch (e) {
+                console.error('Memory stats update error:', e);
+            }
+        }
+
+        function resetMemoryGame() {
+            try {
+                clearInterval(memoryTimer);
+                localStorage.removeItem('nexus_arcade_memory');
+                initMemoryGame();
+            } catch (e) {
+                console.error('Memory reset error:', e);
+            }
+        }
+
+        // Trivia Quiz
+        let triviaQuestions = [];
+        let currentQuestion = 0;
+        let score = 0;
+        let timeLeft = 30;
+        let triviaTimer;
+        let triviaGameActive = false;
+
+        function startTrivia() {
+            try {
+                const category = document.getElementById('trivia-category').value;
+                const difficulty = document.getElementById('trivia-difficulty').value;
+                document.getElementById('trivia-setup').classList.add('hidden');
+                document.getElementById('trivia-game').classList.remove('hidden');
+                score = 0;
+                currentQuestion = 0;
+                fetchTriviaQuestions(category, difficulty);
+            } catch (e) {
+                console.error('Trivia start error:', e);
+            }
+        }
+
+       async function fetchTriviaQuestions(category, difficulty) {
+    try {
+        const response = await fetch(`https://opentdb.com/api.php?amount=10&category=${category}&difficulty=${difficulty}&type=multiple`);
+        const data = await response.json();
+        triviaQuestions = data.results;
+        if (triviaQuestions.length === 0) {
+            document.getElementById('trivia-feedback').textContent = 'Error loading questions. Please try again.';
+            document.getElementById('trivia-game').classList.add('hidden');
+            document.getElementById('trivia-setup').classList.remove('hidden');
+            return;
+        }
+        showTriviaQuestion();
+        startTriviaTimer();
+    } catch (e) {
+        console.error('Trivia fetch error:', e);
+        document.getElementById('trivia-feedback').textContent = 'Error loading questions. Please try again.';
+        document.getElementById('trivia-game').classList.add('hidden');
+        document.getElementById('trivia-setup').classList.remove('hidden');
+    }
+}
+
+   function startTriviaTimer() {
+    try {
+        triviaGameActive = true;
+        timeLeft = 30;
+        document.getElementById('trivia-timer').textContent = timeLeft;
+        triviaTimer = setInterval(() => {
+            timeLeft--;
+            document.getElementById('trivia-timer').textContent = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(triviaTimer);
+                triviaGameActive = false;
+                document.getElementById('trivia-feedback').textContent = 'Time’s up!';
+                document.getElementById('trivia-options').style.pointerEvents = 'none';
+                document.getElementById('trivia-next').classList.remove('hidden');
+            }
+        }, 1000);
+    } catch (e) {
+        console.error('Trivia timer error:', e);
+    }
+}
+
+        function showTriviaQuestion() {
+            try {
+                if (currentQuestion >= triviaQuestions.length) {
+                    endTriviaGame();
+                    return;
+                }
+                const question = triviaQuestions[currentQuestion];
+                document.getElementById('trivia-current').textContent = currentQuestion + 1;
+                document.getElementById('trivia-question').innerHTML = decodeHtmlEntities(question.question);
+                const optionsContainer = document.getElementById('trivia-options');
+                optionsContainer.innerHTML = '';
+                const allOptions = [...question.incorrect_answers, question.correct_answer];
+                shuffleArray(allOptions);
+                allOptions.forEach(option => {
+                    const button = document.createElement('button');
+                    button.className = 'w-full px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-white font-medium text-left transition-all';
+                    button.innerHTML = decodeHtmlEntities(option);
+                    button.setAttribute('aria-label', `Answer: ${option}`);
+                    button.addEventListener('click', () => checkTriviaAnswer(option, question.correct_answer));
+                    optionsContainer.appendChild(button);
+                });
+                document.getElementById('trivia-feedback').textContent = '';
+                document.getElementById('trivia-next').classList.add('hidden');
+                document.getElementById('trivia-options').style.pointerEvents = 'auto';
+                startTriviaTimer();
+            } catch (e) {
+                console.error('Show trivia question error:', e);
+            }
+        }
+
+        function checkTriviaAnswer(selected, correct) {
+            try {
+                if (!triviaGameActive) return;
+                clearInterval(triviaTimer);
+                triviaGameActive = false;
+                const feedbackElement = document.getElementById('trivia-feedback');
+                const options = document.getElementById('trivia-options').children;
+                document.getElementById('trivia-options').style.pointerEvents = 'none';
+                if (selected === correct) {
+                    feedbackElement.textContent = 'Correct!';
+                    feedbackElement.classList.add('text-green-400');
+                    score++;
+                } else {
+                    feedbackElement.textContent = `Incorrect! The correct answer was: ${decodeHtmlEntities(correct)}`;
+                    feedbackElement.classList.add('text-red-400');
+                }
+                feedbackElement.classList.add('fade-in');
+                Array.from(options).forEach(button => {
+                    if (button.innerHTML === decodeHtmlEntities(correct)) {
+                        button.classList.add('bg-green-600');
+                    } else if (button.innerHTML === decodeHtmlEntities(selected)) {
+                        button.classList.add('bg-red-600');
+                    }
+                });
+                document.getElementById('trivia-next').classList.remove('hidden');
+                setTimeout(() => {
+                    feedbackElement.classList.remove('fade-in', 'text-green-400', 'text-red-400');
+                }, 300);
+            } catch (e) {
+                console.error('Trivia answer check error:', e);
+            }
+        }
+
+        function nextTriviaQuestion() {
+            try {
+                currentQuestion++;
+                if (currentQuestion < triviaQuestions.length) {
+                    showTriviaQuestion();
+                } else {
+                    endTriviaGame();
+                }
+            } catch (e) {
+                console.error('Next trivia question error:', e);
+            }
+        }
+
+        function endTriviaGame() {
+            try {
+                clearInterval(triviaTimer);
+                document.getElementById('trivia-game').classList.add('hidden');
+                document.getElementById('trivia-results').classList.remove('hidden');
+                const percentage = (score / triviaQuestions.length) * 100;
+                document.getElementById('trivia-score').textContent = `${score}/${triviaQuestions.length}`;
+                document.getElementById('trivia-percentage').textContent = `${percentage.toFixed(1)}%`;
+                document.getElementById('trivia-progress').style.width = `${percentage}%`;
+                document.getElementById('trivia-progress').classList.add('progress-bar');
+                saveGameProgress('trivia', { bestScore: score });
+            } catch (e) {
+                console.error('End trivia game error:', e);
+            }
+        }
+
+        function resetTrivia() {
+            try {
+                clearInterval(triviaTimer);
+                document.getElementById('trivia-results').classList.add('hidden');
+                document.getElementById('trivia-game').classList.add('hidden');
+                document.getElementById('trivia-setup').classList.remove('hidden');
+                triviaQuestions = [];
+                currentQuestion = 0;
+                score = 0;
+                timeLeft = 30;
+                triviaGameActive = false;
+                localStorage.removeItem('nexus_arcade_trivia');
+            } catch (e) {
+                console.error('Trivia reset error:', e);
+            }
+        }
+
+        // Word Unscramble
+        const words = [
+            { word: 'javascript', hint: 'A popular programming language' },
+            { word: 'computer', hint: 'An electronic device for processing data' },
+            { word: 'algorithm', hint: 'A step-by-step problem-solving procedure' },
+            { word: 'developer', hint: 'A person who creates software' },
+            { word: 'internet', hint: 'A global network of computers' },
+            { word: 'database', hint: 'An organized collection of data' },
+            { word: 'coding', hint: 'The process of writing computer programs' },
+            { word: 'network', hint: 'A group of interconnected systems' }
+        ];
+        let currentWord = {};
+        let points = 0;
+        let wordsSolved = 0;
+        let usedWords = [];
+
+        function newWordGame() {
+            try {
+                const availableWords = words.filter(w => !usedWords.includes(w.word));
+                if (availableWords.length === 0) {
+                    usedWords = [];
+                }
+                const selected = availableWords[Math.floor(Math.random() * availableWords.length)];
+                currentWord = selected;
+                usedWords.push(selected.word);
+                document.getElementById('scrambled-word').textContent = scrambleWord(selected.word);
+                document.getElementById('word-hint').textContent = selected.hint;
+                document.getElementById('word-input').value = '';
+                document.getElementById('word-result').textContent = '';
+                document.getElementById('word-points').textContent = points;
+                document.getElementById('word-solved').textContent = wordsSolved;
+                document.getElementById('word-input').focus();
+            } catch (e) {
+                console.error('Word unscramble start error:', e);
+            }
+        }
+
+        function scrambleWord(word) {
+            const chars = word.split('');
+            shuffleArray(chars);
+            return chars.join('');
+        }
+
+        function checkWord() {
+            try {
+                const input = document.getElementById('word-input').value.trim().toLowerCase();
+                const resultElement = document.getElementById('word-result');
+                if (input === currentWord.word) {
+                    points += 10;
+                    wordsSolved++;
+                    resultElement.textContent = 'Correct! Great job!';
+                    resultElement.classList.add('text-green-400', 'fade-in');
+                    saveGameProgress('word', { points, wordsSolved });
+                    setTimeout(() => {
+                        resultElement.classList.remove('text-green-400', 'fade-in');
+                        newWordGame();
+                    }, 1000);
+                } else {
+                    resultElement.textContent = 'Incorrect! Try again.';
+                    resultElement.classList.add('text-red-400', 'shake');
+                    setTimeout(() => {
+                        resultElement.classList.remove('text-red-400', 'shake');
+                    }, 500);
+                }
+                document.getElementById('word-points').textContent = points;
+                document.getElementById('word-solved').textContent = wordsSolved;
+            } catch (e) {
+                console.error('Word unscramble check error:', e);
+            }
+        }
+
+        function getWordHint() {
+            try {
+                const hintElement = document.getElementById('word-hint');
+                hintElement.textContent = `Hint: ${currentWord.hint} (First letter: ${currentWord.word[0]})`;
+                hintElement.classList.add('fade-in');
+                setTimeout(() => {
+                    hintElement.classList.remove('fade-in');
+                }, 300);
+            } catch (e) {
+                console.error('Word hint error:', e);
+            }
+        }
+
+        function skipWord() {
+            try {
+                newWordGame();
+                const resultElement = document.getElementById('word-result');
+                resultElement.textContent = 'Skipped to new word!';
+                resultElement.classList.add('fade-in');
+                setTimeout(() => {
+                    resultElement.classList.remove('fade-in');
+                    resultElement.textContent = '';
+                }, 1000);
+            } catch (e) {
+                console.error('Word skip error:', e);
+            }
+        }
+
+        // Grid Puzzle
+        let puzzleBoard = [];
+        let puzzleMoves = 0;
+        let puzzleSeconds = 0;
+        let puzzleTimer;
+        let puzzleGameActive = false;
+
+        function initPuzzleGame() {
+            try {
+                const saved = loadGameProgress('puzzle');
+                puzzleMoves = 0;
+                puzzleSeconds = 0;
+                puzzleGameActive = false;
+                updatePuzzleStats();
+                createPuzzleBoard();
+            } catch (e) {
+                console.error('Puzzle initialization error:', e);
+            }
+        }
+
+        function createPuzzleBoard() {
+            try {
+                const board = document.getElementById('puzzle-board');
+                board.innerHTML = '';
+                puzzleBoard = [];
+                const colors = ['bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500'];
+                for (let i = 0; i < 16; i++) {
+                    puzzleBoard.push({
+                        id: i,
+                        color: colors[Math.floor(Math.random() * colors.length)]
+                    });
+                }
+                puzzleBoard.forEach(tile => {
+                    const tileElement = document.createElement('div');
+                    tileElement.className = `tile w-16 h-16 rounded-lg cursor-pointer ${tile.color}`;
+                    tileElement.setAttribute('aria-label', `Tile ${tile.id + 1}`);
+                    tileElement.addEventListener('click', () => flipPuzzleTile(tile.id));
+                    board.appendChild(tileElement);
+                });
+            } catch (e) {
+                console.error('Puzzle board creation error:', e);
+            }
+        }
+
+        function flipPuzzleTile(id) {
+            try {
+                if (!puzzleGameActive) return;
+                const colors = ['bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500'];
+                const currentTile = puzzleBoard[id];
+                const currentIndex = colors.indexOf(currentTile.color);
+                currentTile.color = colors[(currentIndex + 1) % colors.length];
+                updatePuzzleTile(id);
+                const adjacent = [
+                    id - 4 >= 0 ? id - 4 : null,
+                    id + 4 < 16 ? id + 4 : null,
+                    id % 4 !== 0 ? id - 1 : null,
+                    (id + 1) % 4 !== 0 ? id + 1 : null
+                ].filter(i => i !== null);
+                adjacent.forEach(adjId => {
+                    const adjTile = puzzleBoard[adjId];
+                    const adjIndex = colors.indexOf(adjTile.color);
+                    adjTile.color = colors[(adjIndex + 1) % colors.length];
+                    updatePuzzleTile(adjId);
+                });
+                puzzleMoves++;
+                updatePuzzleStats();
+                checkPuzzleWin();
+            } catch (e) {
+                console.error('Puzzle tile flip error:', e);
+            }
+        }
+
+        function updatePuzzleTile(id) {
+            try {
+                const tiles = document.getElementById('puzzle-board').children;
+                tiles[id].className = `tile w-16 h-16 rounded-lg cursor-pointer ${puzzleBoard[id].color}`;
+                tiles[id].classList.add('zoom-in');
+                setTimeout(() => {
+                    tiles[id].classList.remove('zoom-in');
+                }, 300);
+            } catch (e) {
+                console.error('Puzzle tile update error:', e);
+            }
+        }
+
+        function checkPuzzleWin() {
+            try {
+                const firstColor = puzzleBoard[0].color;
+                if (puzzleBoard.every(tile => tile.color === firstColor)) {
+                    clearInterval(puzzleTimer);
+                    puzzleGameActive = false;
+                    const board = document.getElementById('puzzle-board');
+                    const message = document.createElement('div');
+                    message.className = 'col-span-4 text-center py-4 text-xl font-bold text-purple-300';
+                    message.textContent = `You won in ${puzzleMoves} moves!`;
+                    board.appendChild(message);
+                    saveGameProgress('puzzle', { bestMoves: puzzleMoves });
+                    setTimeout(() => {
+                        message.remove();
+                        initPuzzleGame();
+                    }, 2000);
+                }
+            } catch (e) {
+                console.error('Puzzle win check error:', e);
+            }
+        }
+
+        function startPuzzleGame() {
+            try {
+                if (puzzleGameActive) return;
+                puzzleGameActive = true;
+                puzzleMoves = 0;
+                puzzleSeconds = 0;
+                updatePuzzleStats();
+                puzzleTimer = setInterval(() => {
+                    puzzleSeconds++;
+                    document.getElementById('puzzle-time').textContent = puzzleSeconds;
+                }, 1000);
+            } catch (e) {
+                console.error('Puzzle start error:', e);
+            }
+        }
+
+        function updatePuzzleStats() {
+            try {
+                document.getElementById('puzzle-moves').textContent = puzzleMoves;
+                document.getElementById('puzzle-time').textContent = puzzleSeconds;
+            } catch (e) {
+                console.error('Puzzle stats update error:', e);
+            }
+        }
+
+        function resetPuzzleGame() {
+            try {
+                clearInterval(puzzleTimer);
+                localStorage.removeItem('nexus_arcade_puzzle');
+                initPuzzleGame();
+            } catch (e) {
+                console.error('Puzzle reset error:', e);
+            }
+        }
+
+        // Idle Clicker
+        let clickerPoints = 0;
+        let pointsPerSecond = 0;
+        let upgrades = [
+            { id: 'auto-click', name: 'Auto Clicker', cost: 10, increment: 1, owned: 0 },
+            { id: 'double-click', name: 'Double Click', cost: 50, increment: 5, owned: 0 },
+            { id: 'mega-click', name: 'Mega Click', cost: 100, increment: 10, owned: 0 }
+        ];
+
+        function initClicker() {
+            try {
+                const saved = loadGameProgress('clicker');
+                clickerPoints = saved ? saved.clickerPoints : 0;
+                pointsPerSecond = saved ? saved.pointsPerSecond : 0;
+                upgrades = saved ? saved.upgrades : upgrades;
+                updateClickerDisplay();
+                setInterval(autoClick, 1000);
+            } catch (e) {
+                console.error('Clicker initialization error:', e);
+            }
+        }
+
+        function clickPoint() {
+            try {
+                clickerPoints++;
+                document.getElementById('clicker-button').classList.add('pulse');
+                setTimeout(() => {
+                    document.getElementById('clicker-button').classList.remove('pulse');
+                }, 300);
+                updateClickerDisplay();
+                saveGameProgress('clicker', { clickerPoints, pointsPerSecond, upgrades });
+            } catch (e) {
+                console.error('Clicker point error:', e);
+            }
+        }
+
+        function autoClick() {
+            try {
+                clickerPoints += pointsPerSecond;
+                updateClickerDisplay();
+                saveGameProgress('clicker', { clickerPoints, pointsPerSecond, upgrades });
+            } catch (e) {
+                console.error('Clicker auto-click error:', e);
+            }
+        }
+
+        function buyUpgrade(id) {
+            try {
+                const upgrade = upgrades.find(u => u.id === id);
+                if (clickerPoints >= upgrade.cost) {
+                    clickerPoints -= upgrade.cost;
+                    upgrade.owned++;
+                    upgrade.cost = Math.round(upgrade.cost * 1.5);
+                    pointsPerSecond += upgrade.increment;
+                    updateClickerDisplay();
+                    saveGameProgress('clicker', { clickerPoints, pointsPerSecond, upgrades });
+                } else {
+                    const upgradesContainer = document.getElementById('clicker-upgrades');
+                    const upgradeElement = Array.from(upgradesContainer.children).find(el => el.dataset.id === id);
+                    upgradeElement.classList.add('shake');
+                    setTimeout(() => {
+                        upgradeElement.classList.remove('shake');
+                    }, 500);
+                }
+            } catch (e) {
+                console.error('Clicker upgrade error:', e);
+            }
+        }
+
+        function updateClickerDisplay() {
+            try {
+                document.getElementById('clicker-points').textContent = Math.floor(clickerPoints);
+                document.getElementById('clicker-per-second').textContent = pointsPerSecond;
+                const upgradesContainer = document.getElementById('clicker-upgrades');
+                upgradesContainer.innerHTML = '';
+                upgrades.forEach(upgrade => {
+                    const upgradeElement = document.createElement('div');
+                    upgradeElement.className = 'flex justify-between items-center p-2 bg-gray-800 rounded-lg';
+                    upgradeElement.dataset.id = upgrade.id;
+                    upgradeElement.innerHTML = `
+                        <div>
+                            <div class="font-medium">${upgrade.name}</div>
+                            <div class="text-sm text-gray-400">Owned: ${upgrade.owned}</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm">Cost: ${upgrade.cost}</div>
+                            <button class="px-3 py-1 rounded-full bg-purple-600 hover:bg-purple-700 text-white text-sm" onclick="buyUpgrade('${upgrade.id}')" aria-label="Buy ${upgrade.name}">
+                                Buy
+                            </button>
+                        </div>
+                    `;
+                    upgradesContainer.appendChild(upgradeElement);
+                });
+            } catch (e) {
+                console.error('Clicker display update error:', e);
+            }
+        }
+
+        function resetClicker() {
+            try {
+                clickerPoints = 0;
+                pointsPerSecond = 0;
+                upgrades = [
+                    { id: 'auto-click', name: 'Auto Clicker', cost: 10, increment: 1, owned: 0 },
+                    { id: 'double-click', name: 'Double Click', cost: 50, increment: 5, owned: 0 },
+                    { id: 'mega-click', name: 'Mega Click', cost: 100, increment: 10, owned: 0 }
+                ];
+                localStorage.removeItem('nexus_arcade_clicker');
+                updateClickerDisplay();
+            } catch (e) {
+                console.error('Clicker reset error:', e);
+            }
+        }
+
+        // Card Battle
+        let playerHP = 100;
+        let enemyHP = 100;
+        let battleActive = false;
+        let playerCards = [];
+
+        function initBattle() {
+            try {
+                const saved = loadGameProgress('card');
+                playerHP = saved ? saved.playerHP : 100;
+                enemyHP = saved ? saved.enemyHP : 100;
+                battleActive = false;
+                updateBattleDisplay();
+                createPlayerCards();
+            } catch (e) {
+                console.error('Card battle initialization error:', e);
+            }
+        }
+
+        function createPlayerCards() {
+            try {
+                playerCards = [
+                    { name: 'Slash', damage: 10 },
+                    { name: 'Fireball', damage: 20 },
+                    { name: 'Heal', damage: -15 }
+                ];
+                const cardsContainer = document.getElementById('player-cards');
+                cardsContainer.innerHTML = '';
+                playerCards.forEach(card => {
+                    const cardElement = document.createElement('button');
+                    cardElement.className = 'px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-white font-medium';
+                    cardElement.innerHTML = `${card.name} (${card.damage > 0 ? '-' : '+'}${Math.abs(card.damage)})`;
+                    cardElement.setAttribute('aria-label', `Play ${card.name} card`);
+                    cardElement.addEventListener('click', () => playCard(card));
+                    cardsContainer.appendChild(cardElement);
+                });
+            } catch (e) {
+                console.error('Card creation error:', e);
+            }
+        }
+
+        function playCard(card) {
+            try {
+                if (!battleActive) return;
+                const log = document.getElementById('battle-log');
+                if (card.damage > 0) {
+                    enemyHP -= card.damage;
+                    log.innerHTML += `<div class="text-green-400">You used ${card.name}, dealing ${card.damage} damage!</div>`;
+                } else {
+                    playerHP = Math.min(100, playerHP + Math.abs(card.damage));
+                    log.innerHTML += `<div class="text-blue-400">You used ${card.name}, healing ${Math.abs(card.damage)} HP!</div>`;
+                }
+                log.scrollTop = log.scrollHeight;
+                updateBattleDisplay();
+                if (enemyHP <= 0) {
+                    endBattle('You win!');
+                    return;
+                }
+                setTimeout(enemyTurn, 1000);
+            } catch (e) {
+                console.error('Card play error:', e);
+            }
+        }
+
+        function enemyTurn() {
+            try {
+                const moves = [
+                    { name: 'Strike', damage: 12 },
+                    { name: 'Poison', damage: 18 },
+                    { name: 'Recover', damage: -10 }
+                ];
+                const move = moves[Math.floor(Math.random() * moves.length)];
+                const log = document.getElementById('battle-log');
+                if (move.damage > 0) {
+                    playerHP -= move.damage;
+                    log.innerHTML += `<div class="text-red-400">Enemy used ${move.name}, dealing ${move.damage} damage!</div>`;
+                } else {
+                    enemyHP = Math.min(100, enemyHP + Math.abs(move.damage));
+                    log.innerHTML += `<div class="text-yellow-400">Enemy used ${move.name}, healing ${Math.abs(move.damage)} HP!</div>`;
+                }
+                log.scrollTop = log.scrollHeight;
+                updateBattleDisplay();
+                if (playerHP <= 0) {
+                    endBattle('Enemy wins!');
+                }
+            } catch (e) {
+                console.error('Enemy turn error:', e);
+            }
+        }
+
+        function updateBattleDisplay() {
+            try {
+                document.getElementById('player-hp').textContent = playerHP;
+                document.getElementById('enemy-hp').textContent = enemyHP;
+                document.getElementById('player-health').style.width = `${playerHP}%`;
+                document.getElementById('enemy-health').style.width = `${enemyHP}%`;
+                document.getElementById('player-health').classList.add('progress-bar');
+                document.getElementById('enemy-health').classList.add('progress-bar');
+                saveGameProgress('card', { playerHP, enemyHP });
+            } catch (e) {
+                console.error('Battle display update error:', e);
+            }
+        }
+
+        function startBattle() {
+            try {
+                battleActive = true;
+                document.getElementById('battle-start').disabled = true;
+                document.getElementById('battle-log').innerHTML = '<div class="text-center text-gray-400">Battle started!</div>';
+                document.getElementById('battle-status').textContent = '';
+            } catch (e) {
+                console.error('Battle start error:', e);
+            }
+        }
+
+        function endBattle(message) {
+            try {
+                battleActive = false;
+                document.getElementById('battle-status').textContent = message;
+                document.getElementById('battle-status').classList.add('zoom-in');
+                document.getElementById('battle-start').disabled = false;
+                setTimeout(() => {
+                    document.getElementById('battle-status').classList.remove('zoom-in');
+                }, 300);
+            } catch (e) {
+                console.error('Battle end error:', e);
+            }
+        }
+
+        function resetBattle() {
+            try {
+                playerHP = 100;
+                enemyHP = 100;
+                battleActive = false;
+                localStorage.removeItem('nexus_arcade_card');
+                updateBattleDisplay();
+                document.getElementById('battle-log').innerHTML = '<div class="text-center text-gray-400">Battle log will appear here...</div>';
+                document.getElementById('battle-status').textContent = '';
+                document.getElementById('battle-start').disabled = false;
+            } catch (e) {
+                console.error('Battle reset error:', e);
+            }
+        }
+
+        // Reaction Test
+        let reactionStartTime;
+        let reactionTimes = [];
+        let reactionGameActive = false;
+
+        function initReactionTest() {
+            try {
+                const saved = loadGameProgress('reaction');
+                reactionTimes = saved ? saved.reactionTimes : [];
+                updateReactionHistory();
+                resetReactionBox();
+            } catch (e) {
+                console.error('Reaction test initialization error:', e);
+            }
+        }
+
+        function startReactionTest() {
+            try {
+                if (reactionGameActive) return;
+                reactionGameActive = true;
+                const box = document.getElementById('reaction-box');
+                box.innerHTML = '<div class="text-xl text-gray-500">Wait for green...</div>';
+                box.classList.remove('bg-green-500');
+                box.classList.add('bg-gray-800');
+                const waitTime = Math.random() * 3000 + 2000;
+                setTimeout(() => {
+                    if (!reactionGameActive) return;
+                    box.classList.remove('bg-gray-800');
+                    box.classList.add('bg-green-500');
+                    box.innerHTML = '<div class="text-xl text-white">Click now!</div>';
+                    reactionStartTime = performance.now();
+                }, waitTime);
+            } catch (e) {
+                console.error('Reaction test start error:', e);
+            }
+        }
+
+        function resetReactionBox() {
+            try {
+                const box = document.getElementById('reaction-box');
+                box.innerHTML = '<div class="text-xl text-gray-500">Wait for the color to change...</div>';
+                box.classList.remove('bg-green-500', 'bg-red-500');
+                box.classList.add('bg-gray-800');
+                document.getElementById('reaction-time').textContent = '0.00 ms';
+                document.getElementById('best-time').textContent = reactionTimes.length > 0 ? Math.min(...reactionTimes).toFixed(2) : '0.00';
+                box.addEventListener('click', handleReactionClick);
+            } catch (e) {
+                console.error('Reaction box reset error:', e);
+            }
+        }
+
+        function handleReactionClick() {
+            try {
+                const box = document.getElementById('reaction-box');
+                if (!reactionGameActive) return;
+                if (box.classList.contains('bg-green-500')) {
+                    const reactionTime = performance.now() - reactionStartTime;
+                    document.getElementById('reaction-time').textContent = `${reactionTime.toFixed(2)} ms`;
+                    reactionTimes.unshift(reactionTime);
+                    if (reactionTimes.length > 5) reactionTimes.pop();
+                    updateReactionHistory();
+                    saveGameProgress('reaction', { reactionTimes });
+                    reactionGameActive = false;
+                    resetReactionBox();
+                } else {
+                    box.classList.add('bg-red-500');
+                    box.innerHTML = '<div class="text-xl text-white">Too early!</div>';
+                    reactionGameActive = false;
+                    setTimeout(resetReactionBox, 1000);
+                }
+            } catch (e) {
+                console.error('Reaction click error:', e);
+            }
+        }
+
+        function updateReactionHistory() {
+            try {
+                const history = document.getElementById('reaction-history');
+                history.innerHTML = '';
+                reactionTimes.forEach(time => {
+                    const timeElement = document.createElement('div');
+                    timeElement.className = 'bg-gray-800 rounded-lg p-2 text-center';
+                    timeElement.textContent = `${time.toFixed(2)} ms`;
+                    history.appendChild(timeElement);
+                });
+            } catch (e) {
+                console.error('Reaction history update error:', e);
+            }
+        }
+
+        // Tic-Tac-Toe
+        let tttBoard = Array(9).fill(null);
+        let tttWins = 0;
+        let tttGameActive = false;
+
+        function initTicTacToe() {
+            try {
+                const saved = loadGameProgress('tictactoe');
+                tttWins = saved ? saved.tttWins : 0;
+                tttBoard = Array(9).fill(null);
+                tttGameActive = false;
+                updateTicTacToeBoard();
+                document.getElementById('tictactoe-wins').textContent = tttWins;
+                document.getElementById('tictactoe-result').textContent = '';
+            } catch (e) {
+                console.error('Tic-Tac-Toe initialization error:', e);
+            }
+        }
+
+        function updateTicTacToeBoard() {
+            try {
+                const board = document.getElementById('tictactoe-board');
+                board.innerHTML = '';
+                tttBoard.forEach((cell, index) => {
+                    const cellElement = document.createElement('div');
+                    cellElement.className = 'w-20 h-20 bg-gray-800 rounded-lg flex items-center justify-center text-4xl cursor-pointer';
+                    cellElement.setAttribute('aria-label', `Cell ${index + 1}`);
+                    cellElement.innerHTML = cell ? (cell === 'X' ? '<i class="fas fa-times text-blue-400"></i>' : '<i class="fas fa-circle text-red-400"></i>') : '';
+                    if (!cell && tttGameActive) {
+                        cellElement.addEventListener('click', () => playerMove(index));
+                    }
+                    board.appendChild(cellElement);
+                });
+            } catch (e) {
+                console.error('Tic-Tac-Toe board update error:', e);
+            }
+        }
+
+        function playerMove(index) {
+            try {
+                if (!tttGameActive || tttBoard[index]) return;
+                tttBoard[index] = 'X';
+                updateTicTacToeBoard();
+                if (checkTicTacToeWin('X')) {
+                    endTicTacToeGame('You win!');
+                    tttWins++;
+                    document.getElementById('tictactoe-wins').textContent = tttWins;
+                    saveGameProgress('tictactoe', { tttWins });
+                } else if (tttBoard.every(cell => cell)) {
+                    endTicTacToeGame('It’s a tie!');
+                } else {
+                    setTimeout(computerMove, 500);
+                }
+            } catch (e) {
+                console.error('Tic-Tac-Toe player move error:', e);
+            }
+        }
+
+        function computerMove() {
+            try {
+                const emptyCells = tttBoard.map((cell, i) => cell ? null : i).filter(i => i !== null);
+                const move = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+                tttBoard[move] = 'O';
+                updateTicTacToeBoard();
+                if (checkTicTacToeWin('O')) {
+                    endTicTacToeGame('Computer wins!');
+                } else if (tttBoard.every(cell => cell)) {
+                    endTicTacToeGame('It’s a tie!');
+                }
+            } catch (e) {
+                console.error('Tic-Tac-Toe computer move error:', e);
+            }
+        }
+
+        function checkTicTacToeWin(player) {
+            const winConditions = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8],
+                [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                [0, 4, 8], [2, 4, 6]
+            ];
+            return winConditions.some(condition => {
+                return condition.every(index => tttBoard[index] === player);
+            });
+        }
+
+        function endTicTacToeGame(message) {
+            try {
+                tttGameActive = false;
+                document.getElementById('tictactoe-result').textContent = message;
+                document.getElementById('tictactoe-result').classList.add('zoom-in');
+                setTimeout(() => {
+                    document.getElementById('tictactoe-result').classList.remove('zoom-in');
+                }, 300);
+            } catch (e) {
+                console.error('Tic-Tac-Toe end error:', e);
+            }
+        }
+
+        function startTicTacToe() {
+            try {
+                tttBoard = Array(9).fill(null);
+                tttGameActive = true;
+                updateTicTacToeBoard();
+                document.getElementById('tictactoe-result').textContent = '';
+            } catch (e) {
+                console.error('Tic-Tac-Toe start error:', e);
+            }
+        }
+
+        function resetTicTacToe() {
+            try {
+                tttBoard = Array(9).fill(null);
+                tttGameActive = false;
+                tttWins = 0;
+                localStorage.removeItem('nexus_arcade_tictactoe');
+                updateTicTacToeBoard();
+                document.getElementById('tictactoe-wins').textContent = tttWins;
+                document.getElementById('tictactoe-result').textContent = 'Game reset!';
+                document.getElementById('tictactoe-result').classList.add('fade-in');
+                setTimeout(() => {
+                    document.getElementById('tictactoe-result').classList.remove('fade-in');
+                    document.getElementById('tictactoe-result').textContent = '';
+                }, 1000);
+            } catch (e) {
+                console.error('Tic-Tac-Toe reset error:', e);
+            }
+        }
+
+        // Simon Says
+        let simonSequence = [];
+        let playerSequence = [];
+        let simonLevel = 1;
+        let simonScore = 0;
+        let simonGameActive = false;
+
+        function initSimonGame() {
+            try {
+                const saved = loadGameProgress('simon');
+                simonLevel = saved ? saved.simonLevel : 1;
+                simonScore = saved ? saved.simonScore : 0;
+                simonSequence = [];
+                playerSequence = [];
+                simonGameActive = false;
+                createSimonBoard();
+                updateSimonStats();
+                document.getElementById('simon-result').textContent = '';
+            } catch (e) {
+                console.error('Simon initialization error:', e);
+            }
+        }
+
+        function createSimonBoard() {
+            try {
+                const board = document.getElementById('simon-board');
+                board.innerHTML = '';
+                const colors = [
+                    { color: 'bg-red-500', id: 'red', sound: new Audio('https://freesound.org/data/previews/156/156031_2758836-lq.mp3') },
+                    { color: 'bg-blue-500', id: 'blue', sound: new Audio('https://freesound.org/data/previews/156/156030_2758836-lq.mp3') },
+                    { color: 'bg-green-500', id: 'green', sound: new Audio('https://freesound.org/data/previews/156/156029_2758836-lq.mp3') },
+                    { color: 'bg-yellow-500', id: 'yellow', sound: new Audio('https://freesound.org/data/previews/156/156028_2758836-lq.mp3') }
+                ];
+                colors.forEach(color => {
+                    const button = document.createElement('div');
+                    button.className = `w-24 h-24 md:w-32 md:h-32 rounded-lg ${color.color} cursor-pointer`;
+                    button.setAttribute('aria-label', `${color.id} button`);
+                    button.addEventListener('click', () => playerSimonClick(color.id, color.sound));
+                    button.dataset.id = color.id;
+                    board.appendChild(button);
+                });
+            } catch (e) {
+                console.error('Simon board creation error:', e);
+            }
+        }
+
+        function playerSimonClick(id, sound) {
+            try {
+                if (!simonGameActive) return;
+                playerSequence.push(id);
+                sound.play().catch(e => console.warn('Sound play error:', e));
+                const button = Array.from(document.getElementById('simon-board').children).find(btn => btn.dataset.id === id);
+                button.classList.add('pulse');
+                setTimeout(() => {
+                    button.classList.remove('pulse');
+                }, 300);
+                if (playerSequence[playerSequence.length - 1] !== simonSequence[playerSequence.length - 1]) {
+                    endSimonGame('Wrong sequence!');
+                } else if (playerSequence.length === simonSequence.length) {
+                    simonScore += simonLevel * 10;
+                    simonLevel++;
+                    saveGameProgress('simon', { simonLevel, simonScore });
+                    setTimeout(startSimonRound, 1000);
+                }
+            } catch (e) {
+                console.error('Simon player click error:', e);
+            }
+        }
+
+        function startSimonGame() {
+            try {
+                if (simonGameActive) return;
+                simonSequence = [];
+                playerSequence = [];
+                simonLevel = 1;
+                simonScore = 0;
+                updateSimonStats();
+                startSimonRound();
+            } catch (e) {
+                console.error('Simon start error:', e);
+            }
+        }
+
+        function startSimonRound() {
+            try {
+                simonGameActive = true;
+                playerSequence = [];
+                simonSequence.push(['red', 'blue', 'green', 'yellow'][Math.floor(Math.random() * 4)]);
+                updateSimonStats();
+                showSimonSequence();
+            } catch (e) {
+                console.error('Simon round start error:', e);
+            }
+        }
+
+        function showSimonSequence() {
+            try {
+                const board = document.getElementById('simon-board');
+                board.style.pointerEvents = 'none';
+                let i = 0;
+                const interval = setInterval(() => {
+                    if (i >= simonSequence.length) {
+                        clearInterval(interval);
+                        board.style.pointerEvents = 'auto';
+                        return;
+                    }
+                    const color = simonSequence[i];
+                    const button = Array.from(board.children).find(btn => btn.dataset.id === color);
+                    const sound = ['red', 'blue', 'green', 'yellow'].indexOf(color);
+                    const sounds = [
+                        new Audio('https://freesound.org/data/previews/156/156031_2758836-lq.mp3'),
+                        new Audio('https://freesound.org/data/previews/156/156030_2758836-lq.mp3'),
+                        new Audio('https://freesound.org/data/previews/156/156029_2758836-lq.mp3'),
+                        new Audio('https://freesound.org/data/previews/156/156028_2758836-lq.mp3')
+                    ];
+                    button.classList.add('pulse');
+                    sounds[sound].play().catch(e => console.warn('Sound play error:', e));
+                    setTimeout(() => {
+                        button.classList.remove('pulse');
+                    }, 300);
+                    i++;
+                }, 600);
+            } catch (e) {
+                console.error('Simon sequence show error:', e);
+            }
+        }
+
+        function updateSimonStats() {
+            try {
+                document.getElementById('simon-level').textContent = simonLevel;
+                document.getElementById('simon-score').textContent = simonScore;
+            } catch (e) {
+                console.error('Simon stats update error:', e);
+            }
+        }
+
+        function endSimonGame(message) {
+            try {
+                simonGameActive = false;
+                document.getElementById('simon-result').textContent = message;
+                document.getElementById('simon-result').classList.add('zoom-in');
+                document.getElementById('simon-board').style.pointerEvents = 'none';
+                setTimeout(() => {
+                    document.getElementById('simon-result').classList.remove('zoom-in');
+                    document.getElementById('simon-board').style.pointerEvents = 'auto';
+                }, 300);
+            } catch (e) {
+                console.error('Simon end error:', e);
+            }
+        }
+    </script>
+</body>
+</html>
